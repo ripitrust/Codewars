@@ -133,3 +133,42 @@ def get_score(n):
     return 50 * sum(range(1,n+1))
 
 
+def done_or_not(board): #board[i][j]
+
+    dim = len(board)
+    
+    for b in board : #row check
+    
+        if len(set(b)) != dim:
+        
+            return 'Try again!'
+            
+    for i in range(dim): # column check
+    
+        if len(set([a[i] for a in board])) != dim :
+        
+            return 'Try again!'
+    
+    for i in range(0,dim,3): #region check
+    
+        if len(set([board[j][k] for j in range(i,i+3) for k in range(i,i+3)])) != 9:
+          
+            return 'Try again!'
+            
+            
+    return 'Finished!'
+
+
+def done_or_not_clever(board):
+  rows = board
+  cols = [map(lambda x: x[i], board) for i in range(9)]
+  squares = [
+    board[i][j:j + 3] + board[i + 1][j:j + 3] + board[i + 2][j:j + 3]
+      for i in range(0, 9, 3)
+      for j in range(0, 9, 3)]
+    
+  for clusters in (rows, cols, squares):
+    for cluster in clusters:
+      if len(set(cluster)) != 9:
+        return 'Try again!'
+  return 'Finished!'
