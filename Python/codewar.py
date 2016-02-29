@@ -34,7 +34,7 @@ def rotate(nums, k):
 
     return nums
 
-def rotate2(arr, n):
+def rotate_clever(arr, n):
 
     n = n % len(arr)
     return arr[-n:] + arr[:-n]
@@ -172,3 +172,65 @@ def done_or_not_clever(board):
       if len(set(cluster)) != 9:
         return 'Try again!'
   return 'Finished!'
+
+
+
+def multiplication_table(row,col):
+    
+    list = [i*j for i in xrange(1,row+1) for j in xrange(1,col+1)]
+    
+    return [list[i:i+col] for i in xrange(0,row * col,col)]
+
+
+def multiplication_table_bp(row,col):
+    return [[(i+1)*(j+1) for j in range(col)] for i in range(row)]
+
+
+def multiplication_table_clever(row,col):
+    return [range(i,i*col+1,i) for i in range(1,row+1)]
+
+
+
+def create_iterator(func, n):
+
+    def _iterator(value):
+        for i in xrange(n):
+            value += func(value)
+        return value
+            
+    return _iterator
+
+
+
+def create_iterator_bp_clever(func, n):
+  if n == 1: return func
+  return lambda x : func(create_iterator(func, n-1)(x))
+
+
+
+
+def rot13(message):
+    map = { 'A': 'N', 'C': 'P', 'B': 'O', 'E': 'R', 'D': 'Q', 'G': 'T', 'F': 'S', 
+            'I': 'V', 'H': 'U', 'K': 'X', 'J': 'W', 'M': 'Z', 'L': 'Y', 'O': 'B',
+            'N': 'A', 'Q': 'D', 'P': 'C', 'S': 'F', 'R': 'E', 'U': 'H', 'T': 'G',
+            'W': 'J', 'V': 'I', 'Y': 'L', 'X': 'K', 'Z': 'M', 'a': 'n', 'c': 'p', 
+            'b': 'o', 'e': 'r', 'd': 'q', 'g': 't', 'f': 's', 'i': 'v', 'h': 'u', 
+            'k': 'x', 'j': 'w', 'm': 'z', 'l': 'y', 'o': 'b', 'n': 'a', 'q': 'd',
+            'p': 'c', 's': 'f', 'r': 'e', 'u': 'h', 't': 'g', 'w': 'j', 'v': 'i', 
+            'y': 'l', 'x': 'k', 'z': 'm'}
+            
+            
+    return ''.join([map.get(char,char) for char in message])
+
+
+
+def rot13_bp(message):
+    def decode(c):
+        if 'a' <= c <= 'z':
+            base = 'a'
+        elif 'A' <= c <= 'Z':
+            base = 'A'
+        else:
+            return c
+        return chr((ord(c) - ord(base) + 13) % 26 + ord(base))
+    return "".join(decode(c) for c in message)
