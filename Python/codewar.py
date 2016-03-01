@@ -135,7 +135,11 @@ def get_score(n):
 
 def done_or_not(board): #board[i][j]
 
+    import math
+
     dim = len(board)
+
+    region = math.sqrt(dim)
     
     for b in board : #row check
     
@@ -149,9 +153,9 @@ def done_or_not(board): #board[i][j]
         
             return 'Try again!'
     
-    for i in range(0,dim,3): #region check
+    for i in range(0,dim,region): #region check
     
-        if len(set([board[j][k] for j in range(i,i+3) for k in range(i,i+3)])) != 9:
+        if len(set([board[j][k] for j in range(i,i+region) for k in range(i,i+region)])) != dim:
           
             return 'Try again!'
             
@@ -223,7 +227,6 @@ def rot13(message):
     return ''.join([map.get(char,char) for char in message])
 
 
-
 def rot13_bp(message):
     def decode(c):
         if 'a' <= c <= 'z':
@@ -234,3 +237,78 @@ def rot13_bp(message):
             return c
         return chr((ord(c) - ord(base) + 13) % 26 + ord(base))
     return "".join(decode(c) for c in message)
+
+
+def validBraces(string):
+    paren_sum = 0
+    brack_sum = 0
+    curly_sum = 0
+    
+    for s in string:
+      if paren_sum <0 or brack_sum < 0 or curly_sum < 0:
+            return False
+        if s =='(':
+            paren_sum += 1
+        elif s == '[':
+            brack_sum += 1
+        elif s == '{':
+            curly_sum += 1
+        elif s == ')':
+            paren_sum -=1
+        elif s == ']':
+            brack_sum -= 1
+        elif s == '}':
+            curly_sum -=1
+    return paren_sum ==0 and curly_sum == 0 and brack_sum ==0
+
+
+
+import math
+class Sudoku(object):
+    def __init__(self, board):
+        self.board = board
+        
+        def is_valid(self):
+        board = self.board
+        dim = len(board)
+        region = int(sqrt(dim))
+        for b in board : #row check
+            if len(set(b)) != dim or set(b) != set(range(1,dim+1)):
+                return False
+            else:
+                for j in range(0,dim):
+                    if  isinstance(b[j], bool) or b[j] > dim:
+                        return False
+        for i in range(dim): # column check
+            b = [a[i] for a in board]
+            if len(set(b)) != dim :
+                return False
+        for i in range(0,dim,region): #region check
+            b = [board[j][k] for j in range(i,i+region) for k in range(i,i+region)]
+            if len(set(b)) != dim :
+                return False
+        return True
+
+
+    def is_valid_bp(self):
+        if not isinstance(self.board, list):
+            return False
+        n = len(self.board)
+        rootN = int(round(math.sqrt(n)))
+        if rootN * rootN != n:
+            return False
+        isValidRow = lambda r : (isinstance(r, list) and
+                                 len(r) == n and
+                                 all(map(lambda x : type(x) == int, r)))
+        if not all(map(isValidRow, self.board)):
+            return False
+        oneToN = set(range(1, n + 1))
+        isOneToN = lambda l : set(l) == oneToN
+        tranpose = [[self.board[j][i] for i in range(n)] for j in range(n)]
+        squares = [[self.board[p+x][q+y] for x in range(rootN) 
+                                         for y in range(rootN)] 
+                                         for p in range(0, n, rootN)
+                                         for q in range(0, n, rootN)] 
+        return (all(map(isOneToN, self.board)) and
+                all(map(isOneToN, tranpose)) and
+                all(map(isOneToN, squares)))
