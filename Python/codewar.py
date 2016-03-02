@@ -312,3 +312,24 @@ class Sudoku(object):
         return (all(map(isOneToN, self.board)) and
                 all(map(isOneToN, tranpose)) and
                 all(map(isOneToN, squares)))
+
+
+
+
+import re
+def is_valid_IP(strng):
+
+    return bool(re.match(r"^(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)$", strng))
+
+
+
+def is_valid_IP_bp(strng):
+  lst = strng.split('.')
+  passed = 0
+  for sect in lst:
+    if sect.isdigit():
+      if sect[0] != '0':
+        if 0 < int(sect) <= 255:
+          passed += 1
+  return passed == 4
+    
