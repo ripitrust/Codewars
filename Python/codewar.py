@@ -332,4 +332,26 @@ def is_valid_IP_bp(strng):
         if 0 < int(sect) <= 255:
           passed += 1
   return passed == 4
-    
+
+
+
+
+def strip_comments(string, markers):
+    if markers:
+        pattern = "[" + escape("".join(markers)) + "]"
+    else:
+        pattern = ''
+    return '\n'.join(split(pattern, line)[0].rstrip() for line in string.splitlines())
+
+
+def roman_to_int(roman):
+    roman_map = { 'I':1 , 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000}
+    result = 0
+    prev_val = 0
+    for c in roman[::-1]:
+        curr_val  = roman_map[c]
+        if (curr_val < prev_val):
+          curr_val = 0 - curr_val
+        result += curr_val
+        prev_val = curr_val
+    return result
