@@ -245,7 +245,7 @@ def validBraces(string):
     curly_sum = 0
     
     for s in string:
-      if paren_sum <0 or brack_sum < 0 or curly_sum < 0:
+        if paren_sum <0 or brack_sum < 0 or curly_sum < 0:
             return False
         if s =='(':
             paren_sum += 1
@@ -269,25 +269,25 @@ class Sudoku(object):
         self.board = board
         
         def is_valid(self):
-        board = self.board
-        dim = len(board)
-        region = int(sqrt(dim))
-        for b in board : #row check
-            if len(set(b)) != dim or set(b) != set(range(1,dim+1)):
-                return False
-            else:
-                for j in range(0,dim):
-                    if  isinstance(b[j], bool) or b[j] > dim:
-                        return False
-        for i in range(dim): # column check
-            b = [a[i] for a in board]
-            if len(set(b)) != dim :
-                return False
-        for i in range(0,dim,region): #region check
-            b = [board[j][k] for j in range(i,i+region) for k in range(i,i+region)]
-            if len(set(b)) != dim :
-                return False
-        return True
+            board = self.board
+            dim = len(board)
+            region = int(sqrt(dim))
+            for b in board : #row check
+                if len(set(b)) != dim or set(b) != set(range(1,dim+1)):
+                    return False
+                else:
+                    for j in range(0,dim):
+                        if  isinstance(b[j], bool) or b[j] > dim:
+                            return False
+            for i in range(dim): # column check
+                b = [a[i] for a in board]
+                if len(set(b)) != dim :
+                    return False
+            for i in range(0,dim,region): #region check
+                b = [board[j][k] for j in range(i,i+region) for k in range(i,i+region)]
+                if len(set(b)) != dim :
+                    return False
+            return True
 
 
     def is_valid_bp(self):
@@ -355,3 +355,36 @@ def roman_to_int(roman):
         result += curr_val
         prev_val = curr_val
     return result
+
+
+
+
+def strip_url_params(url, params_to_strip = []):
+    uri = url.split('?')[0]
+    if len(url.split('?')) > 1:  
+        params =  url.split('?')[1].split('&')
+    else :
+        params = []
+    params_obj = {}
+    for pair in params :
+        key = pair.split('=')[0]
+        value = pair.split('=')[1]
+        if key not in params_to_strip and key not in params_obj:
+            params_obj[key] = value
+    new_param = ['{0}={1}'.format(k,v) for k,v in params_obj.iteritems()]
+    if len(new_param) == 0:
+        return uri
+    return '?'.join([uri, '&'.join(new_param)])
+
+
+def same_structure_as(original,other):
+
+    if (isinstance(original,list) and not isinstance(other,list)) or (not isinstance(original,list) and isinstance(other,list)):
+        return False
+    elif isinstance(original,list) and isinstance(other,list) :
+        if len(original) != len(other):
+            return False
+        for a,b in zip(original,other):
+            if not same_structure_as(a,b):
+                return False
+    return True
