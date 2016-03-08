@@ -1,13 +1,9 @@
 def validate(n):
-    step0_list = str(n)[::-1]
-    print step0_list
-    step1_list = [ int(value) * 2 if index % 2 is 0 else int(value) for index, value in enumerate(step0_list) ]
-    print step1_list
-    step2_list = [ value - 9 if value >9 else value for value in step1_list]
-    print step2_list
-    result3 = reduce(lambda x,y:x+y, step2_list)
-    return result3 % 10 is 0
+    return reduce(lambda x,y:x+y,\
+          [ value - 9 if value >9 else value for value in \
+                [ int(value) * 2 if index % 2 is not 0 else int(value) for index, value in enumerate(str(n)[::-1])]]) % 10 is 0
 
+    
 
 def chained(functions):
 
