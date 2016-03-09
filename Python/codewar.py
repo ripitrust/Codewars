@@ -384,3 +384,47 @@ def same_structure_as(original,other):
             if not same_structure_as(a,b):
                 return False
     return True
+
+
+class Automaton(object):
+
+    def __init__(self):
+        self.states = ['q1','q2','q3']
+        self.current_state = self.states[0]
+        
+    def read_commands(self, commands):
+        for c in commands :
+            if self.current_state == self.states[0]:
+                if c == '0':
+                    pass
+                elif c =='1':
+                    self.current_state = self.states[1]
+            elif self.current_state == self.states[1]:
+                if c == '0':
+                    self.current_state = self.states[2]
+                elif c =='1':
+                    pass
+            elif self.current_state == self.states[2]:
+                if c == '0' or c =='1':
+                    self.current_state = self.states[1]
+                    
+        return self.current_state == self.states[1]
+                    
+my_automaton = Automaton()
+
+
+class Automaton_bp(object):
+
+    def __init__(self):
+        self.automata = {('q1', '1'): 'q2', ('q1', '0'): 'q1', 
+                         ('q2', '0'): 'q3', ('q2', '1'): 'q2',
+                         ('q3', '0'): 'q2', ('q3', '1'): 'q2'}
+        self.state = "q1"
+
+    def read_commands_bp(self, commands):
+        for c in commands:
+            self.state = self.automata[(self.state, c)]
+        return self.state=="q2"
+
+my_automaton = Automaton()
+
