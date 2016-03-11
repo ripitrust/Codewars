@@ -391,26 +391,25 @@ class Automaton(object):
     def __init__(self):
         self.states = ['q1','q2','q3']
         self.current_state = self.states[0]
-        
-    def read_commands(self, commands):
-        for c in commands :
-            if self.current_state == self.states[0]:
-                if c == '0':
-                    pass
-                elif c =='1':
-                    self.current_state = self.states[1]
-            elif self.current_state == self.states[1]:
-                if c == '0':
-                    self.current_state = self.states[2]
-                elif c =='1':
-                    pass
-            elif self.current_state == self.states[2]:
-                if c == '0' or c =='1':
-                    self.current_state = self.states[1]
+
+        def read_commands(self, commands):
+            for c in commands :
+                if self.current_state == self.states[0]:
+                    if c == '0':
+                        pass
+                    elif c =='1':
+                        self.current_state = self.states[1]
+                elif self.current_state == self.states[1]:
+                    if c == '0':
+                        self.current_state = self.states[2]
+                    elif c =='1':
+                        pass
+                elif self.current_state == self.states[2]:
+                    if c == '0' or c =='1':
+                        self.current_state = self.states[1]
                     
         return self.current_state == self.states[1]
                     
-my_automaton = Automaton()
 
 
 class Automaton_bp(object):
@@ -426,5 +425,37 @@ class Automaton_bp(object):
             self.state = self.automata[(self.state, c)]
         return self.state=="q2"
 
-my_automaton = Automaton()
+
+def to_base_64(string):
+
+    base64_map ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+    result = ''
+    binary = ''.join(['{:08b}'.format(ord(c)) for c in string])
+    if len(binary) % 6 !=0 :
+        binary += (6-len(binary) % 6 ) *'0'
+    for i in range(0,len(binary),6):
+        buf = binary[i:i+6]
+        base64_char = base64_map[int(buf,2)]
+        result += base64_char
+    return result
+    
+def from_base_64(string):
+    result = ''
+    decode_map = {'+': 62, '/': 63, '1': 53, '0': 52, '3': 55, '2': 54, '5': 57, '4': 56,
+            '7': 59, '6': 58, '9': 61, '8': 60, '=': 64, 'A': 0, 'C': 2, 'B': 1, 
+                  'E': 4, 'D': 3, 'G': 6, 'F': 5, 'I': 8, 'H': 7, 'K': 10, 'J': 9, 'M': 12, 
+                  'L': 11, 'O': 14, 'N': 13, 'Q': 16, 'P': 15, 'S': 18, 'R': 17, 'U': 20, 'T': 19,
+                  'W': 22, 'V': 21, 'Y': 24, 'X': 23, 'Z': 25, 'a': 26, 'c': 28, 'b': 27, 'e': 30,
+                  'd': 29, 'g': 32, 'f': 31, 'i': 34, 'h': 33, 'k': 36, 'j': 35, 'm': 38, 'l': 37,
+                  'o': 40, 'n': 39, 'q': 42, 'p': 41, 's': 44, 'r': 43, 'u': 46, 't': 45, 'w': 48,
+                  'v': 47, 'y': 50, 'x': 49, 'z': 51}
+                  
+    binary = ''.join(['{:06b}'.format(decode_map[c]) for c in string])
+    for i in range(0,len(binary),8):
+        buf = binary[i:i+8]
+         if len(buf) == 8 : # skip remaining 0s
+            ascii_char = chr(int(buf,2))
+            result += ascii_char
+    
+    return result
 
