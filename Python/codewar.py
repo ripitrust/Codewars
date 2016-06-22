@@ -15,8 +15,6 @@ def chained(functions):
 
     return operation
 
-
-
 def rotate(nums, k):
     # ...
     n = len(nums)
@@ -453,9 +451,19 @@ def from_base_64(string):
     binary = ''.join(['{:06b}'.format(decode_map[c]) for c in string])
     for i in range(0,len(binary),8):
         buf = binary[i:i+8]
-         if len(buf) == 8 : # skip remaining 0s
+        if len(buf) == 8 : # skip remaining 0s
             ascii_char = chr(int(buf,2))
             result += ascii_char
     
     return result
+
+
+
+
+
+
+
+
+
+
 
