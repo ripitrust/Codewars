@@ -16,7 +16,7 @@ def text_justify(text, width):
     for i in range(1, n+1):
         extras[i][i] = width - word_length[i-1]
         for j in range(i+1, n+1):
-            extras[i][j] = extras[i][j-1] - word_length[j-1] - 1
+            extras[i][j] = extras[i][j-1] - word_length[j-1] - 1 #1 is for the space between two words
 
 
     #calculate line cost according to the extra spaces
@@ -24,10 +24,12 @@ def text_justify(text, width):
         for j in range(i, n+1):
             if extras[i][j] < 0:
                 lc[i][j] = INF
-            elif j == n and extras[i][j] >= 0: # ignore the last line
+            elif j == n and extras[i][j] >= 0 and extras[i][j] != INF:#only one line
                 lc[i][j] = 0
             else:
                 lc[i][j] = extras[i][j] ** 3
+
+    print lc
 
     c[0] = 0
 
@@ -38,7 +40,10 @@ def text_justify(text, width):
             if c[i-1] != INF and lc[i][j] != INF and (c[i-1] + lc[i][j] < c[j]):
 
                 c[j] = c[i-1] + lc[i][j]
-                p[j] = i # parent pointers , j is the start word, i is the optimal end word, so p[word] = optimal start
+                p[j] = i  # parent pointers , j is the start word, i is the optimal end word, so p[word] = optimal start
+
+    print c
+    print p
 
     return p, n, extras, text
 
@@ -51,7 +56,12 @@ def neat_print(p, n, extras, text):
     else:
         k, line_text = neat_print(p, p[n] - 1, extras, text)
 
+        k += 1
+
     extra_spaces = extras[p[n]][n]
+
+    print p[n], n
+
     words = text.split()[p[n]-1:n]
 
     wc = len(words)
@@ -70,7 +80,6 @@ def neat_print(p, n, extras, text):
     #     index += 1
     #     remains -= 1
 
-    print k, p[n], n
     line_text += ('+' * 1).join(words)
     line_text += '\n'
 
@@ -82,20 +91,21 @@ if __name__ == '__main__':
     # text = '1234 5678 912345 qwqwe 23231ff asdag Re11s dasds dsad sadsada 123456 asd'
     # text = 'hello this world he don know the dark side of the force'
 
-    text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' \
-           'Vestibulum sagittis dolor mauris, at elementum ligula tempor eget. ' \
-           'In quis rhoncus nunc, at aliquet orci. Fusce at dolor sit amet felis suscipit tristique. ' \
-           'Nam a imperdiet tellus. Nulla eu vestibulum urna. Vivamus tincidunt suscipit enim, ' \
-           'nec ultrices nisi volutpat ac. Maecenas sit amet lacinia arcu, non dictum justo. ' \
-           'Donec sed quam vel risus faucibus euismod. Suspendisse rhoncus rhoncus felis at fermentum. ' \
-           'Donec lorem magna, ultricies a nunc sit amet, blandit fringilla nunc. ' \
-           'In vestibulum velit ac felis rhoncus pellentesque. Mauris at tellus enim. Aliquam eleifend tempus dapibus. ' \
-           'Pellentesque commodo, nisi sit amet hendrerit fringilla, ante odio porta lacus, ' \
-           'ut elementum justo nulla et dolor.'
+    text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+    # text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' \
+    #        'Vestibulum sagittis dolor mauris, at elementum ligula tempor eget. ' \
+    #        'In quis rhoncus nunc, at aliquet orci. Fusce at dolor sit amet felis suscipit tristique. ' \
+    #        'Nam a imperdiet tellus. Nulla eu vestibulum urna. Vivamus tincidunt suscipit enim, ' \
+    #        'nec ultrices nisi volutpat ac. Maecenas sit amet lacinia arcu, non dictum justo. ' \
+    #        'Donec sed quam vel risus faucibus euismod. Suspendisse rhoncus rhoncus felis at fermentum. ' \
+    #        'Donec lorem magna, ultricies a nunc sit amet, blandit fringilla nunc. ' \
+    #        'In vestibulum velit ac felis rhoncus pellentesque. Mauris at tellus enim. Aliquam eleifend tempus dapibus. ' \
+    #        'Pellentesque commodo, nisi sit amet hendrerit fringilla, ante odio porta lacus, ' \
+    #        'ut elementum justo nulla et dolor.'
 
     # text = 'a b c d e'
 
-    width = 25
+    width = 17
 
     k, result = neat_print(*text_justify(text, width))
 
