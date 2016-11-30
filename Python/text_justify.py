@@ -19,7 +19,6 @@ def justify(text, width):
 
     return '\n'.join(new_result)
 
-
 def justify_best_practice(text, width):
     length = text.rfind(' ', 0, width+1)
     if length == -1 or len(text) <= width: return text
@@ -31,3 +30,71 @@ def justify_best_practice(text, width):
         line = line.replace(' ', ' '*expand)
         line = line.replace(' '*expand, ' '*(expand+1), extra)
     return line + '\n' + justify(text[length+1:], width)
+
+
+INF = float('inf')
+
+def justify2(text, width):
+
+    c = [INF for _ in range(len(text) + 1)]
+    p = [INF for _ in range(len(text) + 1)]
+    n = len(text)
+
+    c[0] = 0
+
+    for i in range(1, n+1):
+        for j in range(1, i+1):
+            badness = cost(text[j-1:i], width) + c[j-1]
+            if badness < c[i]:
+                c[i] = badness
+                p[i] = j
+
+    return c, p
+
+
+def cost(words, width):
+
+    num_space = len(words) - 1
+    length = reduce(lambda y, w: len(w) + y, words, 0)
+    if length + num_space > width:
+        return INF
+    return (width - length - num_space) ** 3
+
+
+
+def print_wrap(c, text):
+
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+
+    #text = 'a b c d e f'.split()
+    text = 'hello world come to the dark side of the force'.split()
+    width = 11
+    c, p = justify2(text, width)
+
+
+
+
+
+
+
+
+
+
+
+
