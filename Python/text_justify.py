@@ -40,6 +40,7 @@ def text_justify(text, width):
                 c[j] = c[i-1] + lc[i][j]
                 p[j] = i # parent pointers , j is the start word, i is the optimal end word, so p[word] = optimal start
 
+    print extras
     return p, n, extras, text
 
 
@@ -50,6 +51,7 @@ def neat_print(p, n, extras, text):
         line_text = ''
     else:
         k, line_text = neat_print(p, p[n] - 1, extras, text)
+        k += 1
 
     extra_spaces = extras[p[n]][n]
     words = text.split()[p[n]-1:n]
